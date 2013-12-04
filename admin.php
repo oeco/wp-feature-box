@@ -19,6 +19,7 @@ if(!class_exists('WP_Feature_Box_Admin')) {
 			
 			add_action('admin_menu', array($this, 'add_plugin_page'));
 			add_action('admin_init', array($this, 'page_init'));
+			add_filter('wp_feature_box_options', array($this, 'filter_options'));
 
 		}
 		
@@ -107,18 +108,12 @@ if(!class_exists('WP_Feature_Box_Admin')) {
 
 		}
 		
-		function get_options() {
+		function filter_options($settings) {
 
-			$settings = array(
-				'allow_embed' => 1,
-				'default_embed_text' => __('View more at', 'wp-feature-box') . ' ' . get_bloginfo('name'),
-				'default_embed_link' => home_url('/')
-			);
-			
 			$options = get_option($this->settings_id);
 			
 			if($options)
-				return array_merge($settings, $options);
+				$settings = array_merge($settings, $options);
 			
 			return $settings;
 

@@ -14,10 +14,9 @@ if(!class_exists('WP_Feature_Embed')) {
 		public function __construct() {
 			
 			add_action('init', array($this, 'print_embed_script'));
-			
 			add_action('wp_ajax_' . $this->ajax_action, array($this, 'get_embed'));
 			add_action('wp_ajax_no_priv_' . $this->ajax_action, array($this, 'get_embed'));
-			
+
 		}
 		
 		public function get_embed() {
@@ -46,8 +45,16 @@ if(!class_exists('WP_Feature_Embed')) {
 			
 			header('Content-type: application/javascript');
 			header('Access-Control-Allow-Origin: *');
-			echo $_REQUEST['callback']. '(' . json_encode($response) . ')';
+			echo $_REQUEST['callback'] . '(' . json_encode($response) . ')';
 			exit;
+
+		}
+		
+		public function get_footer_text() {
+			
+			$options = $this->get_options();
+			
+			return '<footer class="wp-feature-box-footer"><p><a href="' . $options['default_embed_link'] . '" target="_blank" rel="external">' . $options['default_embed_text'] . '</a></p></footer>'; 
 			
 		}
 		
@@ -69,10 +76,11 @@ if(!class_exists('WP_Feature_Embed')) {
 						'varName' => 'Sly'
 					),
 					array(
-						'srcUrl' => $this->get_dir() . 'js/slider.js',
-						'varName' => 'wpFeatureBoxSlider'
+						'srcUrl' => $this->get_dir() . 'js/feature-box.min.js',
+						'varName' => 'wpFeatureBox'
 					)
-				)
+				),
+				'footer' => $this->get_footer_text()
 			);
 			
 			return $settings;
@@ -80,18 +88,22 @@ if(!class_exists('WP_Feature_Embed')) {
 		}
 		
 		public function print_embed_script() {
-			
-			global $wp_feature_box;
-			
+				
 			if(isset($_REQUEST['wp_feature_embed'])) {
+			
+				$options = $this->get_options();
 				
-				echo 'var wpFeatureEmbedSettings = ' . json_encode($this->get_embed_settings()) . ';';
+				if($options['allow_embed']) {
+						
+					echo 'var wpFeatureEmbedSettings = ' . json_encode($this->get_embed_settings()) . ';';
+					
+					echo file_get_contents($this->get_path() . '/js/embed.min.js');
+	
+					header('Content-type: application/javascript');
+					exit;
+	
+				}
 				
-				echo file_get_contents($this->get_path() . '/js/embed.min.js');
-
-				header('Content-type: application/javascript');
-				exit;
-
 			}
 			
 		}

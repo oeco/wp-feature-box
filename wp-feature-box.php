@@ -113,6 +113,18 @@ if(!class_exists('WP_Feature_Box')) {
 			
 		}
 		
+		public function get_options() {
+
+			$settings = array(
+				'allow_embed' => 1,
+				'default_embed_text' => __('View more at', 'wp-feature-box') . ' ' . get_bloginfo('name'),
+				'default_embed_link' => home_url('/')
+			);
+			
+			return apply_filters('wp_feature_box_options', $settings);
+
+		}
+		
 		public function acf_dir() {
 			return $this->get_dir() . 'includes/acf/';
 		}
@@ -153,6 +165,9 @@ if(!class_exists('WP_Feature_Box')) {
 		public function admin_css() {
 			?>
 			<style type="text/css" media="screen">
+				#menu-posts-wp-feature-box .wp-menu-image:before {
+					content: '' !important;
+				}
 				#menu-posts-wp-feature-box .wp-menu-image {
 					background: url(<?php echo $this->get_dir(); ?>/img/icon-small.png) center no-repeat !important;
 				}
@@ -165,7 +180,8 @@ if(!class_exists('WP_Feature_Box')) {
 			
 			wp_register_script('sly', $this->get_dir() . 'js/sly.min.js', array('jquery'), '1.2.2');
 			
-			wp_enqueue_style('wp-feature-box', $this->get_dir() . 'css/feature-box.css');
+			wp_enqueue_style('wp-feature-box', $this->get_dir() . 'css/feature-box.css', array(), '0.1.0');
+			wp_enqueue_script('wp-feature-box', $this->get_dir() . 'js/feature-box.js', array('jquery'), '0.1.0');
 			wp_enqueue_script('wp-feature-box-slider', $this->get_dir() . 'js/slider.js', array('jquery', 'sly'), '0.1.0');
 			
 		}
@@ -424,9 +440,10 @@ if(!class_exists('WP_Feature_Box')) {
 			$selector .= '</ul>';
 			
 			$slider .= '</ul>';
-			$slider .= '</div>';
 			
 			$slider .= $selector;
+			
+			$slider .= '</div>';
 			
 			$slider .= '</div>';
 			

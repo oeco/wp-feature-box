@@ -9,6 +9,7 @@ Create custom featured embedable content boxes and slider inside your WordPress 
 - Allow users to embed your feature box
 - Responsive design
 - Multiple custom links and text
+- Custom background image
 
 ## Usage
 

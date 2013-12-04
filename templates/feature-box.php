@@ -18,6 +18,10 @@ $links = get_feature_box_links();
 				<?php endif; ?>
 			</header>
 			
+			<?php if($main_link) : ?>
+				<a class="wp-feature-box-main-link" title="<?php the_title(); ?>" href="<?php echo $main_link['url']; ?>" <?php if(!$link['external']) echo 'target="_blank" rel="external"'; ?>></a>
+			<?php endif; ?>
+			
 			<?php if($links) : ?>
 				<section id="wp-feature-box-<?php the_ID(); ?>-links" class="wp-feature-box-links">
 					<?php foreach($links as $link_group) : ?>

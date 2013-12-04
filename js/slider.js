@@ -54,6 +54,10 @@
 				if($(this).find('.wp-feature-box-container').innerHeight() > height)
 					height = $(this).find('.wp-feature-box-container').innerHeight();
 			});
+			
+			slider.find('.wp-feature-box-selectors').css({
+				'margin-left': -slider.find('.wp-feature-box-selectors').width()/2
+			});
 		
 			// increase height for selectors
 			height += 60;

@@ -89,7 +89,7 @@
 		var currentNode = 0;
 		
 		nodes.each(function() {
-			
+
 			var node = $(this);
 
 			var ids = node.attr('data-ids');
@@ -111,7 +111,10 @@
 					if(embed.error) {
 						console.log(embed.error);
 					} else {
-						node.replaceWith($(embed.html));
+						var $embed = $(embed.html);
+						if(settings.footer)
+							$embed.append(settings.footer);
+						node.replaceWith($embed);
 					}
 		
 					if(currentNode === nodes.length) {
