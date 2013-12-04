@@ -112,9 +112,9 @@
 						console.log(embed.error);
 					} else {
 						var $embed = $(embed.html);
-						if(settings.footer)
-							$embed.append(settings.footer);
 						node.replaceWith($embed);
+						if(settings.footer)
+							$(settings.footer).insertAfter($embed);
 					}
 		
 					if(currentNode === nodes.length) {
@@ -128,4 +128,4 @@
 		});
 	}
 	
-})(wpFeatureEmbedSettings);
+})(wpFeatureBoxSettings);

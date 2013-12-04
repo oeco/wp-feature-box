@@ -51,8 +51,6 @@ if(!class_exists('WP_Feature_Box_Admin')) {
 		
 		function page_init() {
 			
-			//register_setting($this->settings_group, $this->settings_id, array($this, 'store_data'));
-			
 			/* 
 			 * Embed
 			 */

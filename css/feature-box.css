@@ -10,6 +10,13 @@
 
 .wp-feature-box .wp-feature-box-container {
 	padding: 5%;
+	display: inline-block;
+	width: 100%;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	-khtml-box-sizing: border-box;
+	-moz-box-sizing: border-box;
 }
 
 .wp-feature-box-slider-content {
@@ -212,4 +219,58 @@
 .wp-feature-box-footer {
 	text-align: right;
 	font-size: 90%;
+}
+
+/* 
+ * Embed tool
+ */
+
+.wp-feature-box-embed-action .embed-icon {
+	position: absolute;
+	bottom: 15px;
+	right: 15px;
+	z-index: 2;
+	display: block;
+	width: 16px;
+	height: 16px;
+	text-indent: -9999px;
+	background: url(../img/share.png);
+	opacity: .6;
+}
+
+.wp-feature-box-embed-action .embed-icon:hover {
+	opacity: 1;
+}
+
+.wp-feature-box-embed-action .embed-box {
+	position: absolute;
+	z-index: 9999;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	background: rgba(0,0,0,0.9);
+	padding: 8% 20%;
+	color: #fff !important;
+	font-size: 120%;
+}
+
+.wp-feature-box-embed-action .embed-box textarea {
+	width: 100%;
+	background: #f0f0f0;
+	color: #999;
+	height: 80px;
+	display: block;
+	font-size: 80%;
+	margin-bottom: 20px;
+}
+
+.wp-feature-box-embed-action .embed-box .close-embed-tool {
+	display: block;
+	text-align: right;
+	text-transform: uppercase;
+	font-size: 80%;
+	color: #fff;
+	font-weight: 600;
+	text-decoration: none;
 }

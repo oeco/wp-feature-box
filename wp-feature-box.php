@@ -115,12 +115,7 @@ if(!class_exists('WP_Feature_Box')) {
 		
 		public function get_options() {
 
-			$settings = array(
-				'allow_embed' => 1,
-				'default_embed_text' => __('View more at', 'wp-feature-box') . ' ' . get_bloginfo('name'),
-				'default_embed_link' => home_url('/')
-			);
-			
+			$settings = array();
 			return apply_filters('wp_feature_box_options', $settings);
 
 		}
@@ -182,7 +177,9 @@ if(!class_exists('WP_Feature_Box')) {
 			
 			wp_enqueue_style('wp-feature-box', $this->get_dir() . 'css/feature-box.css', array(), '0.1.0');
 			wp_enqueue_script('wp-feature-box', $this->get_dir() . 'js/feature-box.js', array('jquery'), '0.1.0');
-			wp_enqueue_script('wp-feature-box-slider', $this->get_dir() . 'js/slider.js', array('jquery', 'sly'), '0.1.0');
+			wp_enqueue_script('wp-feature-box-slider', $this->get_dir() . 'js/slider.js', array('jquery', 'sly', 'wp-feature-box'), '0.1.0');
+			
+			wp_localize_script('wp-feature-box', 'wpFeatureBoxSettings', $this->get_feature_box_js_settings());
 			
 		}
 		
@@ -378,6 +375,16 @@ if(!class_exists('WP_Feature_Box')) {
 			$links = apply_filters('wp_feature_box_links', (!empty($links) ? $links : false), $id);
 			
 			return $links;
+			
+		}
+		
+		public function get_feature_box_js_settings() {
+
+			$settings = array(
+				'baseurl' => apply_filters('wp_feature_box_base_url', home_url('/'))
+			);
+			
+			return apply_filters('wp_feature_box_js_settings', $settings);
 			
 		}
 		

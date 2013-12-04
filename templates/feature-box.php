@@ -4,7 +4,7 @@ $image = get_feature_box_image();
 $main_link = get_feature_box_main_link();
 $links = get_feature_box_links();
 ?>
-<section id="wp-feature-box-<?php the_ID(); ?>" class="wp-feature-box" <?php if($image) echo 'style="background-image:url(' . $image['url'] . ')";'; ?>>
+<section id="wp-feature-box-<?php the_ID(); ?>" class="wp-feature-box" <?php if($image) echo 'style="background-image:url(' . $image['url'] . ')";'; ?> data-itemid="<?php the_ID(); ?>">
 	
 	<div class="wp-feature-box-container">
 	
