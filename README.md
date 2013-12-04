@@ -1,10 +1,10 @@
 # WP Feature Box
 
-Create custom featured embedable content boxes and slides inside your WordPress site.
+Create custom featured embedable content boxes and slider inside your WordPress site.
 
 ## Features
 
-- Easy to combine boxes to create slides
+- Easy to combine boxes to create slider
 - Shortcodes
 - Allow users to embed your feature box
 - Responsive design
@@ -30,7 +30,7 @@ echo get_feature_box($id);
 ```php
 <?php
 $ids = array(12, 14, 16); // List of ids
-echo get_feature_box($ids);
+echo get_feature_box_slider($ids);
 ?>
 ```
 

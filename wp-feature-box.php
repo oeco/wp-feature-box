@@ -511,8 +511,3 @@ function get_feature_box_links($id = false) {
 	global $wp_feature_box;
 	return $wp_feature_box->get_feature_box_links($id);
 }
-
-function print_feature_box() {  
-	echo get_feature_box_slider(array(19,32), array('autorotate' => 1));
-}
-add_action('wp_footer', 'print_feature_box');
