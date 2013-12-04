@@ -1,6 +1,6 @@
 # WP Feature Box
 
-Create custom featured content boxes and slides inside your WordPress site. Tell stories and your outreach
+Create custom featured embedable content boxes and slides inside your WordPress site.
 
 ## Features
 
