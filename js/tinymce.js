@@ -1,4 +1,5 @@
 (function($) {
+	
 	tinymce.create('tinymce.plugins.wpFeatureBox', {
 		/**
          * Initializes the plugin, this will be executed after the plugin has been created.
@@ -9,8 +10,6 @@
          * @param {string} url Absolute URL to where the plugin is located.
          */
 		init : function(ed, url) {
-			
-			var box = $('#wp-feature-box-builder');
 
 			ed.addCommand('wpfeaturebox', function() {
 				ed.windowManager.open({
@@ -24,69 +23,12 @@
 				});
 			});
 			
-			box.find('.add-single').click(function() {
-
-				var selected = $('.single-feature-box option:selected');
-				
-				if(selected.length) {
-					ed.execCommand('mceInsertContent', 0, '[wp-feature-box id="' + selected.val() + '"]');
-				}
-				
-				tinymce.activeEditor.windowManager.close();
-
-				return false;
-
-			});
-			
-			box.find('.include-item').click(function() {
-
-				var selected = $('.slider-feature-box-available option:selected');
-				
-				if(selected.length) {
-					selected.appendTo($('.slider-feature-box-selected'));
-				}
-				
-				return false;
-
-			});
-			
-			box.find('.exclude-item').click(function() {
-
-				var selected = $('.slider-feature-box-selected option:selected');
-
-				if(selected.length) {
-					selected.appendTo($('.slider-feature-box-available'));
-				}
-									  
-				return false;
-
-			});
-			
-			box.find('.add-slider').click(function() {
-
-				var selected = $('.slider-feature-box-selected option');
-				
-				var vals = [];
-				
-				selected.each(function() {
-					vals.push($(this).val());
-				});
-				
-				if(vals.length) {
-					selected.appendTo($('.slider-feature-box-available'));
-					ed.execCommand('mceInsertContent', 0, '[wp-feature-box ids="' + vals.join(',') + '"]');
-				}
-				tinymce.activeEditor.windowManager.close();
-
-				return false;
-
-			});
-			
 			ed.addButton('wpfeaturebox', {
 				title : 'WP Feature Box',
 				cmd : 'wpfeaturebox',
 				image : url + '/../img/icon-tinymce.png'
 			});
+			
 		},
 
 		/**
@@ -122,4 +64,77 @@
 	
 	// Register plugin
 	tinymce.PluginManager.add('wpfeaturebox', tinymce.plugins.wpFeatureBox);
+	
+	function setupBox() {
+	
+		var box = $('#wp-feature-box-builder');
+		
+		box.find('.add-single').click(function() {
+	
+			var selected = $('.single-feature-box option:selected');
+			
+			if(selected.length) {
+				tinymce.execCommand('mceInsertContent', 0, '[wp-feature-box id="' + selected.val() + '"]');
+			}
+			
+			tinymce.activeEditor.windowManager.close();
+	
+			return false;
+	
+		});
+		
+		box.find('.include-item').click(function() {
+	
+			var selected = $('.slider-feature-box-available option:selected');
+			
+			if(selected.length) {
+				selected.appendTo($('.slider-feature-box-selected'));
+			}
+			
+			return false;
+	
+		});
+		
+		box.find('.exclude-item').click(function() {
+	
+			var selected = $('.slider-feature-box-selected option:selected');
+	
+			if(selected.length) {
+				selected.appendTo($('.slider-feature-box-available'));
+			}
+								  
+			return false;
+	
+		});
+		
+		box.find('.add-slider').click(function() {
+	
+			var selected = $('.slider-feature-box-selected option');
+			
+			var vals = [];
+			
+			selected.each(function() {
+				vals.push($(this).val());
+			});
+			
+			if(vals.length) {
+				if(vals.length === 1) {
+					alert('You must select at least 2 items');
+				} else {
+					selected.appendTo($('.slider-feature-box-available'));
+					tinymce.execCommand('mceInsertContent', 0, '[wp-feature-box ids="' + vals.join(',') + '"]');
+					tinymce.activeEditor.windowManager.close();
+				}
+			} else {
+				alert('You must select at least 2 items');
+			}
+	
+			return false;
+	
+		});
+		
+	}
+
+	jQuery(document).ready(setupBox);
+	
 })(jQuery);
