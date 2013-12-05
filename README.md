@@ -1,6 +1,6 @@
 # WP Feature Box
 
-Create custom featured embedable content boxes and slider inside your WordPress site.
+Create custom featured embedable content boxes and slider inside your WordPress site. Plug in created as part of the work of the ((o))ecoLab and featured on projects like http://oxpeckers.org
 
 ### [View demo](http://cardume.art.br/wp-feature-box/)
 
