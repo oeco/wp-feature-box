@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP Feature Box
-Plugin URI: http://oeco.github.io/wp-feature-box
+Plugin URI: http://cardume.art.br/wp-feature-box
 Description: A simple WordPress feature box plugin
 Version: 0.1.0
 Author: Miguel Peixe
