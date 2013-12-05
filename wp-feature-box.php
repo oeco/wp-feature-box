@@ -418,10 +418,14 @@ if(!class_exists('WP_Feature_Box')) {
 		public function get_feature_box_slider($ids = array(), $options = array()) {
 			
 			if(empty($ids) || !is_array($ids)) {
-				$items = get_posts(array('post_type' => 'wp_feature_box', 'posts_per_page' => 6));
-				$ids = array();
-				foreach($items as $item) {
-					$ids[] = $item->ID;
+				$items = get_posts(array('post_type' => $this->post_type, 'posts_per_page' => 6));
+				if($items) {
+					$ids = array();
+					foreach($items as $item) {
+						$ids[] = $item->ID;
+					}
+				} else {
+					return false;
 				}
 			}
 			
