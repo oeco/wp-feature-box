@@ -6,6 +6,7 @@
 	color: #f0f0f0;
 	position: relative;
 	padding: 0;
+    min-height: 350px;
 }
 
 .wp-feature-box .wp-feature-box-container {

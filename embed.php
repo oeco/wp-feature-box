@@ -14,6 +14,7 @@ if(!class_exists('WP_Feature_Embed')) {
 		public function __construct() {
 			
 			add_action('init', array($this, 'print_embed_script'));
+			add_action('init', array($this, 'get_embed'));
 			add_action('wp_ajax_' . $this->ajax_action, array($this, 'get_embed'));
 			add_action('wp_ajax_no_priv_' . $this->ajax_action, array($this, 'get_embed'));
 			add_filter('wp_feature_box_options', array($this, 'embed_options'), 1, 1);
@@ -22,24 +23,28 @@ if(!class_exists('WP_Feature_Embed')) {
 		}
 		
 		public function get_embed() {
+            
+            if(isset($_REQUEST['action']) && $_REQUEST['action'] == $this->ajax_action) {
 			
-			if(!isset($_REQUEST['ids']) || !is_array($_REQUEST['ids']) || empty($_REQUEST['ids']))
-				$this->ajax_response(array('error' => __('Missing feature box IDs', 'wp-feature-box')));
-			
-			$ids = $_REQUEST['ids'];
-			$embed = array();
-			
-			if(count($ids) > 1) {
+                if(!isset($_REQUEST['ids']) || !is_array($_REQUEST['ids']) || empty($_REQUEST['ids']))
+                    $this->ajax_response(array('error' => __('Missing feature box IDs', 'wp-feature-box')));
+                
+                $ids = $_REQUEST['ids'];
+                $embed = array();
+                
+                if(count($ids) > 1) {
+    
+                    $embed['html'] = $this->get_feature_box_slider($ids);
+    
+                } else {
+                    
+                    $embed['html'] = $this->get_feature_box(array_shift($ids));
+                    
+                }
+                
+                $this->ajax_response($embed);
 
-				$embed['html'] = $this->get_feature_box_slider($ids);
-
-			} else {
-				
-				$embed['html'] = $this->get_feature_box(array_shift($ids));
-				
-			}
-			
-			$this->ajax_response($embed);
+            }
 			
 		}
 		
@@ -56,8 +61,7 @@ if(!class_exists('WP_Feature_Embed')) {
 		public function ajax_response($response) {
 			
 			header('Content-type: application/javascript');
-			header('Access-Control-Allow-Origin: *');
-			echo $_REQUEST['callback'] . '(' . json_encode($response) . ')';
+			echo $_REQUEST['callback'] . '(' . str_replace(array('\n', '\t', '\r'), '', json_encode($response)) . ');';
 			exit;
 
 		}
@@ -96,14 +100,9 @@ if(!class_exists('WP_Feature_Embed')) {
 			$embed_settings = array(
 				'allowEmbed' => intval($options['allow_embed']),
 				'embedTool' => $this->get_embed_tool(),
-				'ajaxurl' => admin_url('admin-ajax.php'),
 				'action' => $this->ajax_action,
 				'css' => $this->get_dir() . 'css/feature-box.css',
 				'scripts' => array(
-					array(
-						'srcUrl' => '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js',
-						'varName' => 'jQuery'
-					),
 					array(
 						'srcUrl' => $this->get_dir() . 'js/sly.min.js',
 						'varName' => 'Sly'
@@ -121,6 +120,8 @@ if(!class_exists('WP_Feature_Embed')) {
 		}
 		
 		public function print_embed_script() {
+	
+            header('Content-type: application/javascript');
 				
 			if(isset($_REQUEST['wp_feature_embed'])) {
 			
@@ -131,8 +132,6 @@ if(!class_exists('WP_Feature_Embed')) {
 					echo 'var wpFeatureBoxSettings = ' . str_replace(array('\r', '\n', '\t'), '', json_encode($this->get_feature_box_js_settings())) . ';';
 					
 					echo file_get_contents($this->get_path() . '/js/embed.min.js');
-	
-					header('Content-type: application/javascript');
 					exit;
 	
 				} else {
