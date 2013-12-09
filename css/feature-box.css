@@ -39,9 +39,9 @@
 	background:	-ms-linear-gradient(top,
 				rgba(0,0,0,0.9),
 				transparent);
-	background:	-moz-linear-gradient(center bottom,
-				rgba(0,0,0,0.9) 100%,
-				transparent 0%);
+	background:	-moz-linear-gradient(top,
+				rgba(0,0,0,0.9) 0,
+				rgba(0,0,0,0) 100%);
 	background:	-o-linear-gradient(transparent, rgba(0,0,0,0.5));
 	filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",rgba(0,0,0,0.9),transparent));
 }
