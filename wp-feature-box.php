@@ -3,7 +3,7 @@
 Plugin Name: WP Feature Box
 Plugin URI: http://cardume.art.br/wp-feature-box
 Description: A simple WordPress feature box plugin
-Version: 0.1.2
+Version: 0.1.3
 Author: Miguel Peixe
 Author URI: http://ecolab.oeco.org.br/
 License: GPLv3

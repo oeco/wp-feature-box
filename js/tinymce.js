@@ -57,7 +57,7 @@
 				author : 'Miguel Peixe',
 				authorurl : 'http://ecolab.oeco.org.br',
 				infourl : 'http://github.com/oeco/wp-feature-box',
-				version : "0.1.2"
+				version : "0.1.3"
 			};
 		}
 	});
