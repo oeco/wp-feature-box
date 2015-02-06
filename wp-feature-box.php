@@ -3,7 +3,7 @@
 Plugin Name: WP Feature Box
 Plugin URI: http://cardume.art.br/wp-feature-box
 Description: A simple WordPress feature box plugin
-Version: 0.1.1
+Version: 0.1.2
 Author: Miguel Peixe
 Author URI: http://ecolab.oeco.org.br/
 License: GPLv3
@@ -26,107 +26,107 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 if(!class_exists('WP_Feature_Box')) {
-	
+
 	class WP_Feature_Box {
-		
+
 		var $fields_prefix = '_wp_feature_box_';
-		
+
 		var $post_type = 'wp-feature-box';
-		
+
 		var $links_amount = 4;
-		
+
 		public function __construct() {
-			
+
 			/*
 			 * Allow symbolic linked plugin
 			 */
 			require_once(sprintf("%s/includes/class-symbolic-press.php", dirname(__FILE__)));
 			new Symbolic_Press(__FILE__);
-			
+
 			/*
 			 * Include ACF if not already registered as plugin
 			 */
 			if(!class_exists('acf')) {
-				
+
 				/*
 				 * Include Advanced Custom Fields
 				 * More info: http://advancedcustomfields.com
 				 */
 				add_filter('acf/helpers/get_dir', array($this, 'acf_dir'));
-				
+
 				require_once(sprintf("%s/includes/acf/acf.php", $this->get_path()));
 			}
-			
+
 			/*
              * Include ACF Website Field
              */
 			if(!class_exists('acf_website_field_plugin')) {
 				require_once(sprintf("%s/includes/acf/add-ons/acf-website-field/acf-website_field.php", $this->get_path()));
 			}
-			
+
 			/*
 			 * Register post type
 			 */
 			add_action('init', array($this, 'register_post_type'));
-			
+
 			/*
 			 * Register scripts and styles
 			 */
 			add_action('wp_enqueue_scripts', array($this, 'scripts'), 11);
-			
+
 			/*
              * Register ACF field groups
              */
 			add_action('init', array($this, 'register_field_group'));
-			
+
 			/*
 			 * Register shortcode
 			 */
 			add_shortcode('wp-feature-box', array($this, 'shortcode'));
-			
+
 			/*
  			 * Admin CSS
 			 */
 			add_action('admin_head', array($this, 'admin_css'));
-			
+
 		}
-		
+
 		public static function activate() {
-			
+
 			// Do nothing
-			
+
 		}
-		
+
 		public static function deactivate() {
-			
+
 			// Do nothing
-			
+
 		}
-		
+
 		public function get_dir() {
 			return apply_filters('wp_feature_box_dir', plugin_dir_url(__FILE__));
 		}
-		
+
 		public function get_path() {
-			
+
 			return apply_filters('wp_feature_box_dir', dirname(__FILE__));
-			
+
 		}
-		
+
 		public function get_options() {
 
 			$settings = array();
 			return apply_filters('wp_feature_box_options', $settings);
 
 		}
-		
+
 		public function acf_dir() {
 			return $this->get_dir() . 'includes/acf/';
 		}
-		
+
 		public function register_post_type() {
-			
-			$labels = array( 
+
+			$labels = array(
 				'name' => __('Feature box', 'wp-feature-box'),
 				'singular_name' => __('Feature item', 'wp-feature-box'),
 				'add_new' => __('Add feature item', 'wp-feature-box'),
@@ -139,8 +139,8 @@ if(!class_exists('WP_Feature_Box')) {
 				'not_found_in_trash' => __('No feature item found in the trash', 'wp-feature-box'),
 				'menu_name' => __('Feature box', 'wp-feature-box')
 			);
-			
-			$args = array( 
+
+			$args = array(
 				'labels' => $labels,
 				'hierarchical' => false,
 				'description' => __('Feature Box Items', 'wp-feature-box'),
@@ -152,11 +152,11 @@ if(!class_exists('WP_Feature_Box')) {
 				'has_archive' => false,
 				'rewrite' => false
 			);
-			
+
 			register_post_type($this->post_type, $args);
-			
+
 		}
-		
+
 		public function admin_css() {
 			?>
 			<style type="text/css" media="screen">
@@ -170,21 +170,21 @@ if(!class_exists('WP_Feature_Box')) {
 			</style>
 			<?php
 		}
-		
+
 		public function scripts() {
-			
+
 			wp_register_script('sly', $this->get_dir() . 'js/sly.min.js', array('jquery'), '1.2.2');
-			
+
 			wp_enqueue_style('wp-feature-box', $this->get_dir() . 'css/feature-box.css', array(), '0.1.0');
 			wp_enqueue_script('wp-feature-box', $this->get_dir() . 'js/feature-box.js', array('jquery'), '0.1.0');
 			wp_enqueue_script('wp-feature-box-slider', $this->get_dir() . 'js/slider.js', array('jquery', 'sly', 'wp-feature-box'), '0.1.0');
-			
+
 			wp_localize_script('wp-feature-box', 'wpFeatureBoxSettings', $this->get_feature_box_js_settings());
-			
+
 		}
-		
+
 		public function register_field_group() {
-			
+
 			$field_group = array(
 				'id' => 'acf_wp-feature-box-settings',
 				'title' => __('Feature Box Settings', 'wp-feature-box'),
@@ -206,7 +206,7 @@ if(!class_exists('WP_Feature_Box')) {
 				),
 				'menu_order' => 0
 			);
-			
+
 			/*
              * Basic fields
              */
@@ -243,35 +243,35 @@ if(!class_exists('WP_Feature_Box')) {
 					'default_value' => '',
 				)
 			);
-			
+
 			/*
              * Merge link group fields
              */
 			foreach($this->get_link_groups() as $key => $title) {
 				$fields = array_merge($fields, $this->link_group_fields($key, $title));
 			}
-			
+
 			$field_group['fields'] = $fields;
-			
+
 			// register on acf
 			register_field_group($field_group);
-			
+
 		}
-		
+
 		public function get_link_groups() {
-			
+
 			$link_groups = array(
 				'first_link_group' => __('First link group', 'wp-feature-box'),
 				'second_link_group' => __('Second link group', 'wp-feature-box'),
 				'third_link_group' => __('Third link group', 'wp-feature-box')
 			);
-			
+
 			return apply_filters('wp_feature_box_link_groups', $link_groups);
-			
+
 		}
-		
+
 		protected function link_group_fields($key, $title) {
-			
+
 			$field = array(
 				array(
 					'key' => 'field_wp_feature_box_link_group_' . $key,
@@ -287,9 +287,9 @@ if(!class_exists('WP_Feature_Box')) {
 					'instructions' => __('Enter a title to appear on top of the links', 'wp-feature-box')
 				)
 			);
-			
+
 			for($i = 1; $i <= $this->links_amount; $i++) {
-				
+
 				$field[] = array(
 					'key' => 'field_wp_feature_box_link_group_' . $key . '_link_' . $i,
 					'label' => __('Link', 'wp-feature-box'),
@@ -300,103 +300,103 @@ if(!class_exists('WP_Feature_Box')) {
 					'output_format' => 1,
 					'default_value' => '',
 				);
-				
+
 			}
-			
+
 			return $field;
 		}
-		
+
 		public function get_feature_box_field($id, $field) {
 			return get_field($this->fields_prefix . $field, $id);
 		}
-		
+
 		/*
 		 * Get feature box description
 		 */
 		public function get_feature_box_description($id) {
 			global $post;
 			$id = $id ? $id: $post->ID;
-			
+
 			return $this->get_feature_box_field($id, 'description');
 		}
-		
+
 		/*
 		 * Get feature box background image
 		 */
 		public function get_feature_box_image($id) {
 			global $post;
 			$id = $id ? $id: $post->ID;
-			
+
 			return $this->get_feature_box_field($id, 'background_image');
 		}
-		
+
 		/*
 		 * Get feature box main link
 		 */
 		public function get_feature_box_main_link($id) {
 			global $post;
 			$id = $id ? $id: $post->ID;
-			
+
 			return $this->get_feature_box_field($id, 'link');
 		}
-		
+
 		/*
 		 * Get feature box links
 		 */
 		public function get_feature_box_links($id) {
 			global $post;
 			$id = $id ? $id : $post->ID;
-			
+
 			$link_groups = $this->get_link_groups();
 			$links_amount = $this->links_amount;
-			
+
 			$links = array();
-			
+
 			foreach($link_groups as $key => $title) {
-				
+
 				$link_group = array();
-				
+
 				$link_group['title'] = get_field($this->fields_prefix . $key . '_title', $id);
-				$link_group['links'] = array(); 
-				
+				$link_group['links'] = array();
+
 				for($i = 1; $i <= $links_amount; $i++) {
-					
+
 					$link = get_field($this->fields_prefix . $key . '_link_' . $i, $id);
 					if($link)
 						$link_group['links'][] = $link;
-					
+
 				}
-				
+
 				if(!empty($link_group['links']))
 					$links[] = $link_group;
-				
+
 			}
-			
+
 			$links = apply_filters('wp_feature_box_links', (!empty($links) ? $links : false), $id);
-			
+
 			return $links;
-			
+
 		}
-		
+
 		public function get_feature_box_js_settings() {
 
 			$settings = array(
 				'baseurl' => apply_filters('wp_feature_box_base_url', home_url('/'))
 			);
-			
+
 			return apply_filters('wp_feature_box_js_settings', $settings);
-			
+
 		}
-		
+
 		/*
          * Get feature box item
          */
 		public function get_feature_box($id) {
-			
+
 			$feature_box = false;
-			
+
 			if($id && get_post_type($id) == $this->post_type) {
-				
+
 				global $post;
 				$post = get_post($id);
 				setup_postdata($post);
@@ -404,19 +404,19 @@ if(!class_exists('WP_Feature_Box')) {
 				include($this->get_path() . '/templates/feature-box.php');
 				$feature_box = ob_get_clean();
 				wp_reset_postdata();
-				
+
 			}
-			
+
 			return $feature_box;
-			
+
 		}
-		
-		
+
+
 		/*
          * Get feature box slider
          */
 		public function get_feature_box_slider($ids = array(), $options = array()) {
-			
+
 			if(empty($ids) || !is_array($ids)) {
 				$items = get_posts(array('post_type' => $this->post_type, 'posts_per_page' => 6));
 				if($items) {
@@ -428,87 +428,87 @@ if(!class_exists('WP_Feature_Box')) {
 					return false;
 				}
 			}
-			
+
 			$settings = array(
 				'autorotate' => 0
 			);
-			
+
 			$settings = array_merge($settings, $options);
-			
+
 			$attrs = '';
-			
+
 			if($settings['autorotate'])
 				$attrs .= ' data-autorotate="true" ';
-			
+
 			$slider = '';
 			$slider .= '<div class="wp-feature-box-slider" ' . $attrs . '>';
 			$slider .= '<div class="wp-feature-box-slider-content">';
 			$slider .= '<ul class="wp-feature-box-items">';
-			
+
 			$selector = '';
 			$selector .= '<ul class="wp-feature-box-selectors">';
-			
+
 			foreach($ids as $id) {
 				$slider .= '<li data-sliderid="' . $id . '">' . $this->get_feature_box($id) . '</li>';
 				$selector .= '<li data-sliderid="' . $id . '" title="' . get_the_title($id). '">' . get_the_title($id) . '</li>';
 			}
-			
+
 			$selector .= '</ul>';
-			
+
 			$slider .= '</ul>';
-			
+
 			$slider .= $selector;
-			
+
 			$slider .= '</div>';
-			
+
 			$slider .= '</div>';
-			
+
 			return $slider;
-			
+
 		}
-		
+
 		/*
 		 * Shortcodes
 		 */
 		public function shortcode($atts) {
-			
+
 			extract(shortcode_atts(array(
 				'id' => 0,
 				'ids' => '',
 				'autorotate' => 0
 			), $atts));
-			
+
 			$ids = explode(',', $ids);
-			
+
 			if($id) {
 				return $this->get_feature_box($id);
 			}
-			
+
 			if(!empty($ids)) {
-				
+
 				if(count($ids) == 1) {
 					return $this->get_feature_box(array_shift($ids));
 				} else {
 					$options = array(
-						'autorotate' => $autorotate	
+						'autorotate' => $autorotate
 					);
 					return $this->get_feature_box_slider($ids, $options);
 				}
-				
+
 			}
 		}
-		
+
 	}
-	
+
 }
 
 if(class_exists('WP_Feature_Box')) {
-	
+
 	register_activation_hook(__FILE__, array('WP_Feature_Box', 'activate'));
 	register_deactivation_hook(__FILE__, array('WP_Feature_Box', 'deactivate'));
-	
+
 	$wp_feature_box = new WP_Feature_Box();
-	
+
 }
 
 include_once($wp_feature_box->get_path() . '/admin.php');
