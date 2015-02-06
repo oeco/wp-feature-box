@@ -2,9 +2,9 @@
 Contributors: ecolab, miguelpeixe
 Donate link: http://ecolab.oeco.org.br/
 Tags: feature box, embed, slider, custom background, highlight, shortcode
-Requires at least: 3.0.1
-Tested up to: 3.7.1
-Stable tag: 0.1.1
+Requires at least: 4.0
+Tested up to: 4.1
+Stable tag: 0.1.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -12,7 +12,7 @@ Create embedable featured content boxes and slider inside your WordPress site.
 
 == Description ==
 
-Create embedable featured content boxes and slider inside your WordPress site. 
+Create embedable featured content boxes and slider inside your WordPress site.
 
 *[Demo](http://cardume.art.br/wp-feature-box)*
 
@@ -51,8 +51,8 @@ You might help us with that. [Ask as something](https://github.com/oeco/wp-featu
 == Screenshots ==
 
 1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets 
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png` 
+the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
+directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
 (or jpg, jpeg, gif).
 2. This is the second screen shot
 

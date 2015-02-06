@@ -1,5 +1,5 @@
 (function($) {
-	
+
 	tinymce.create('tinymce.plugins.wpFeatureBox', {
 		/**
          * Initializes the plugin, this will be executed after the plugin has been created.
@@ -22,13 +22,13 @@
 					plugin_url : url
 				});
 			});
-			
+
 			ed.addButton('wpfeaturebox', {
 				title : 'WP Feature Box',
 				cmd : 'wpfeaturebox',
 				image : url + '/../img/icon-tinymce.png'
 			});
-			
+
 		},
 
 		/**
@@ -44,7 +44,7 @@
 		createControl : function(n, cm) {
 			return null;
 		},
-		
+
 		/**
          * Returns information about the plugin as a name/value array.
          * The current keys are longname, author, authorurl, infourl and version.
@@ -57,66 +57,66 @@
 				author : 'Miguel Peixe',
 				authorurl : 'http://ecolab.oeco.org.br',
 				infourl : 'http://github.com/oeco/wp-feature-box',
-				version : "0.1.0"
+				version : "0.1.2"
 			};
 		}
 	});
-	
+
 	// Register plugin
 	tinymce.PluginManager.add('wpfeaturebox', tinymce.plugins.wpFeatureBox);
-	
+
 	function setupBox() {
-	
+
 		var box = $('#wp-feature-box-builder');
-		
+
 		box.find('.add-single').click(function() {
-	
+
 			var selected = $('.single-feature-box option:selected');
-			
+
 			if(selected.length) {
 				tinymce.execCommand('mceInsertContent', 0, '[wp-feature-box id="' + selected.val() + '"]');
 			}
-			
+
 			tinymce.activeEditor.windowManager.close();
-	
+
 			return false;
-	
+
 		});
-		
+
 		box.find('.include-item').click(function() {
-	
+
 			var selected = $('.slider-feature-box-available option:selected');
-			
+
 			if(selected.length) {
 				selected.appendTo($('.slider-feature-box-selected'));
 			}
-			
+
 			return false;
-	
+
 		});
-		
+
 		box.find('.exclude-item').click(function() {
-	
+
 			var selected = $('.slider-feature-box-selected option:selected');
-	
+
 			if(selected.length) {
 				selected.appendTo($('.slider-feature-box-available'));
 			}
-								  
+
 			return false;
-	
+
 		});
-		
+
 		box.find('.add-slider').click(function() {
-	
+
 			var selected = $('.slider-feature-box-selected option');
-			
+
 			var vals = [];
-			
+
 			selected.each(function() {
 				vals.push($(this).val());
 			});
-			
+
 			if(vals.length) {
 				if(vals.length === 1) {
 					alert('You must select at least 2 items');
@@ -128,13 +128,13 @@
 			} else {
 				alert('You must select at least 2 items');
 			}
-	
+
 			return false;
-	
+
 		});
-		
+
 	}
 
 	jQuery(document).ready(setupBox);
-	
+
 })(jQuery);

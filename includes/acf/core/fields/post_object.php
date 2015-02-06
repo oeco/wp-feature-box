@@ -166,7 +166,7 @@ class acf_field_post_object extends acf_field
 			
 			// filters
 			$args = apply_filters('acf/fields/post_object/query', $args, $field, $post);
-			$args = apply_filters('acf/fields/post_object/query/name=' . $field['name'], $args, $field, $post );
+			$args = apply_filters('acf/fields/post_object/query/name=' . $field['_name'], $args, $field, $post );
 			$args = apply_filters('acf/fields/post_object/query/key=' . $field['key'], $args, $field, $post );
 			
 			
@@ -180,39 +180,51 @@ class acf_field_post_object extends acf_field
 			}
 			
 			
-			if($posts)
-			{
-				foreach( $posts as $p )
-				{
-					// find title. Could use get_the_title, but that uses get_post(), so I think this uses less Memory
-					$title = '';
-					$ancestors = get_ancestors( $p->ID, $p->post_type );
-					if($ancestors)
-					{
-						foreach($ancestors as $a)
-						{
-							$title .= '–';
-						}
+			if($posts) {
+				
+				foreach( $posts as $p ) {
+					
+					// title
+					$title = get_the_title( $p->ID );
+					
+					
+					// empty
+					if( $title === '' ) {
+						
+						$title = __('(no title)', 'acf');
+						
 					}
-					$title .= ' ' . apply_filters( 'the_title', $p->post_title, $p->ID );
+					
+					
+					// ancestors
+					if( $p->post_type != 'attachment' ) {
+						
+						$ancestors = get_ancestors( $p->ID, $p->post_type );
+						
+						$title = str_repeat('- ', count($ancestors)) . $title;
+						
+					}
 					
 					
 					// status
-					if( $p->post_status != "publish" )
-					{
-						$title .= " ($p->post_status)";
+					if( get_post_status( $p->ID ) != "publish" ) {
+						
+						$title .= ' (' . get_post_status( $p->ID ) . ')';
+						
 					}
 					
+					
 					// WPML
-					if( defined('ICL_LANGUAGE_CODE') )
-					{
+					if( defined('ICL_LANGUAGE_CODE') ) {
+						
 						$title .= ' (' . ICL_LANGUAGE_CODE . ')';
+						
 					}
 					
 					
 					// filters
 					$title = apply_filters('acf/fields/post_object/result', $title, $p, $field, $post);
-					$title = apply_filters('acf/fields/post_object/result/name=' . $field['name'] , $title, $p, $field, $post);
+					$title = apply_filters('acf/fields/post_object/result/name=' . $field['_name'] , $title, $p, $field, $post);
 					$title = apply_filters('acf/fields/post_object/result/key=' . $field['key'], $title, $p, $field, $post);
 					
 					
@@ -493,6 +505,13 @@ class acf_field_post_object extends acf_field
 	
 	function update_value( $value, $post_id, $field )
 	{
+		// validate
+		if( empty($value) )
+		{
+			return $value;
+		}
+		
+		
 		if( is_object($value) && isset($value->ID) )
 		{
 			// object

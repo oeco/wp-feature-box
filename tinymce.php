@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * WP Feature Box
  * TinyMCE input
  */
@@ -8,33 +8,35 @@
 if(!class_exists('WP_Feature_Box_TinyMCE')) {
 
 	class WP_Feature_Box_TinyMCE extends WP_Feature_Box {
-	
+
 		function __construct() {
 			add_action('init', array($this, 'init'));
 		}
-		
+
 		function init() {
 			add_filter('mce_external_plugins', array($this, 'add_buttons'));
 			add_filter('mce_buttons', array($this, 'register_buttons'));
 			if((current_user_can('edit_posts') || current_user_can('edit_pages')) && 'true' == get_user_option('rich_editing')) {
+				wp_enqueue_script( array ( 'wpdialogs' ) );
+				wp_enqueue_style('wp-jquery-ui-dialog');
 				add_action('admin_footer', array($this, 'builder'));
 			}
 		}
-		
+
 		function add_buttons($plugins) {
 
 			$plugins['wpfeaturebox'] = $this->get_dir() . 'js/tinymce.js';
 			return $plugins;
 
-		}		
-		
+		}
+
 		function register_buttons($buttons) {
-			
+
 			$buttons[] = 'wpfeaturebox';
 			return $buttons;
-			
+
 		}
-		
+
 		function builder() {
 			$feature_boxes = get_posts(array('post_type' => $this->post_type, 'posts_per_page' => -1));
 			?>
@@ -86,11 +88,11 @@ if(!class_exists('WP_Feature_Box_TinyMCE')) {
 					width: 100%;
 					display: block;
 				}
-				
+
 				#wp-feature-box-builder .slider-feature-box-select {
 					width: 100%;
 				}
-				
+
 				#wp-feature-box-builder .slider-select-item {
 					display: table-cell;
 					width: 1%;
@@ -99,14 +101,14 @@ if(!class_exists('WP_Feature_Box_TinyMCE')) {
 			</style>
 			<?php
 		}
-		
+
 
 	}
 
 }
 
 if(class_exists('WP_Feature_Box_TinyMCE')) {
-	
+
 	$wp_feature_box_tinymce = new WP_Feature_Box_TinyMCE();
-	
+
 }

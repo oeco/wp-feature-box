@@ -431,6 +431,12 @@ var acf = {
 		field.after( new_field );
 		
 		
+		// set select values
+		new_field.find('select').each(function(){
+			$(this).val( $(this).attr('data-val') ).trigger('change');
+		});
+		
+		
 		// open up form
 		if( field.hasClass('form_open') )
 		{
@@ -445,13 +451,7 @@ var acf = {
 		// update new_field label / name
 		var label = new_field.find('tr.field_label:first input[type="text"]'),
 			name = new_field.find('tr.field_name:first input[type="text"]');
-					
-		
-		// set select values
-		new_field.find('select').each(function(){
-			$(this).val( $(this).attr('data-val') ).trigger('change');
-		});
-		
+				
 		
 		name.val('');
 		label.val( label.val() + ' (' + acf.l10n.copy + ')' );
@@ -571,7 +571,8 @@ var acf = {
 					'ű': 'u',
 					'í': 'i',
 					' ' : '_',
-					'\'' : ''
+					'\'' : '',
+					'\\?' : ''
 				};
 			
 			$.each( replace, function(k, v){
@@ -850,7 +851,7 @@ var acf = {
 	$(document).ready(function(){
 		
 		// custom Publish metabox
-		$('#submitdiv #publish').attr('class', 'acf-button');
+		$('#submitdiv #publish').attr('class', 'acf-button large');
 		$('#submitdiv a.submitdelete').attr('class', 'delete-field-group').attr('id', 'submit-delete');
 		
 		
@@ -1258,7 +1259,7 @@ var acf = {
 			// vars
 			var $new_tr = $old_tr.clone(),
 				old_i = parseFloat( $old_tr.attr('data-i') ),
-				new_i = old_i + 1;
+				new_i = acf.helpers.uniqid();
 			
 			
 			// update names

@@ -1,6 +1,5 @@
 <?php
 
-
 /*
 *  get_field_reference()
 *
@@ -17,8 +16,8 @@
 *  @return	string	$return:  a string containing the field_key
 */
 
-function get_field_reference( $field_name, $post_id )
-{
+function get_field_reference( $field_name, $post_id ) {
+	
 	// cache
 	$found = false;
 	$cache = wp_cache_get( 'field_reference/post_id=' .  $post_id . '/name=' .  $field_name, 'acf', false, $found );
@@ -73,8 +72,8 @@ function get_field_reference( $field_name, $post_id )
 *  @return	array	$return: an array containin the field groups
 */
 
-function get_field_objects( $post_id = false, $options = array() )
-{
+function get_field_objects( $post_id = false, $options = array() ) {
+	
 	// global
 	global $wpdb;
 	
@@ -94,8 +93,8 @@ function get_field_objects( $post_id = false, $options = array() )
 		$keys = $wpdb->get_col($wpdb->prepare(
 			"SELECT meta_value FROM $wpdb->postmeta WHERE post_id = %d and meta_key LIKE %s AND meta_value LIKE %s",
 			$post_id,
-			'\_%',
-			'field\_%'
+			'_%',
+			'field_%'
 		));
 	}
 	elseif( strpos($post_id, 'user_') !== false )
@@ -105,15 +104,15 @@ function get_field_objects( $post_id = false, $options = array() )
 		$keys = $wpdb->get_col($wpdb->prepare(
 			"SELECT meta_value FROM $wpdb->usermeta WHERE user_id = %d and meta_key LIKE %s AND meta_value LIKE %s",
 			$user_id,
-			'\_%',
-			'field\_%'
+			'_%',
+			'field_%'
 		));
 	}
 	else
 	{
 		$keys = $wpdb->get_col($wpdb->prepare(
-			"SELECT option_name FROM $wpdb->options WHERE option_name LIKE %s",
-			'\_' . $post_id . '\_%' 
+			"SELECT option_value FROM $wpdb->options WHERE option_name LIKE %s",
+			'_' . $post_id . '_%' 
 		));
 	}
 
@@ -161,9 +160,16 @@ function get_field_objects( $post_id = false, $options = array() )
 *  @return	array	$return: an array containin the field values
 */
 
-function get_fields( $post_id = false )
-{
-	$fields = get_field_objects( $post_id );
+function get_fields( $post_id = false, $format_value = true ) {
+	
+	// vars
+	$options = array(
+		'load_value' => true,
+		'format_value' => $format_value
+	);
+	
+	
+	$fields = get_field_objects( $post_id, $options );
 	
 	if( is_array($fields) )
 	{
@@ -195,8 +201,8 @@ function get_fields( $post_id = false )
 *  @return	mixed		$value: the value found
 */
  
-function get_field( $field_key, $post_id = false, $format_value = true ) 
-{
+function get_field( $field_key, $post_id = false, $format_value = true ) {
+	
 	// vars
 	$return = false;
 	$options = array(
@@ -237,8 +243,12 @@ function get_field( $field_key, $post_id = false, $format_value = true )
 *  @return	array		$return: an array containin the field groups
 */
 
-function get_field_object( $field_key, $post_id = false, $options = array() )
-{
+function get_field_object( $field_key, $post_id = false, $options = array() ) {
+	
+	// make sure add-ons are included
+	acf()->include_3rd_party();
+		
+		
 	// filter post_id
 	$post_id = apply_filters('acf/get_post_id', $post_id );
 	$field = false;
@@ -255,7 +265,7 @@ function get_field_object( $field_key, $post_id = false, $options = array() )
 	
 	
 	// is $field_name a name? pre 3.4.0
-	if( strpos($field_key, "field_") === false )
+	if( substr($field_key, 0, 6) !== 'field_' )
 	{
 		// get field key
 		$field_key = get_field_reference( $field_key, $post_id );
@@ -263,7 +273,7 @@ function get_field_object( $field_key, $post_id = false, $options = array() )
 	
 	
 	// get field
-	if( strpos($field_key, "field_") !== false )
+	if( substr($field_key, 0, 6) === 'field_' )
 	{
 		$field = apply_filters('acf/load_field', false, $field_key );
 	}
@@ -316,8 +326,8 @@ function get_field_object( $field_key, $post_id = false, $options = array() )
 *  @return	string		$value
 */
 
-function the_field( $field_name, $post_id = false )
-{
+function the_field( $field_name, $post_id = false ) {
+	
 	$value = get_field($field_name, $post_id);
 	
 	if( is_array($value) )
@@ -343,15 +353,17 @@ function the_field( $field_name, $post_id = false )
 *  @return	$post_id (mixed) the post_id of which the value is saved against
 */
 
-function have_rows( $field_name, $post_id = false )
-{
+function have_rows( $field_name, $post_id = false ) {
 	
 	// vars
 	$depth = 0;
 	$row = array();
 	$new_parent_loop = false;
 	$new_child_loop = false;
-	$no_post_id = (!$post_id) ? true : false;
+	
+	
+	// reference
+	$_post_id = $post_id;
 	
 	
 	// filter post_id
@@ -375,36 +387,50 @@ function have_rows( $field_name, $post_id = false )
 		$prev = prev( $GLOBALS['acf_field'] );
 		
 		
-		// detect a change in params?
-		if( $post_id != $row['post_id'] || $field_name != $row['name'] )
+		// If post_id has changed, this is most likely an archive loop
+		if( $post_id != $row['post_id'] )
 		{
-			// case: previous have_rows loop was terminated early and template is now loading row data from another $post
-			// case: previous have_rows loop was terminated early and template is now loading row data from another $field_name
-			// case: nested have_rows loop
-			$new_parent_loop = true;
-			
-			if( isset($row['value'][ $row['i'] ][ $field_name ]) )
+			if( $prev && $prev['post_id'] == $post_id )
 			{
-				// Inception: Repeater within repeater
-				// Note: Sit back and enter the next level of dream
+				// case: Change in $post_id was due to a nested loop ending
+				// action: move up one level through the loops
+				reset_rows();
+			}
+			elseif( empty($_post_id) && isset($row['value'][ $row['i'] ][ $field_name ]) )
+			{
+				// case: Change in $post_id was due to this being a nested loop and not specifying the $post_id
+				// action: move down one level into a new loop
+				$new_child_loop = true;
+			}
+			else
+			{
+				// case: Chang in $post_id is the most obvious, used in an WP_Query loop with multiple $post objects
+				// action: leave this current loop alone and create a new parent loop
+				$new_parent_loop = true;
+			}
+		}
+		elseif( $field_name != $row['name'] )
+		{
+			if( $prev && $prev['name'] == $field_name && $prev['post_id'] == $post_id )
+			{
+				// case: Change in $field_name was due to a nested loop ending
+				// action: move up one level through the loops
+				reset_rows();
+			}
+			elseif( isset($row['value'][ $row['i'] ][ $field_name ]) )
+			{
+				// case: Change in $field_name was due to this being a nested loop
+				// action: move down one level into a new loop
 				$new_child_loop = true;
 				
-				
-				// It is possible that the origional have_rows function used a custom $post_id param, but this sub loop did not use one. If so, remove the potential to create a new parent loop due to the $post_id change!
-				if( $no_post_id || $post_id == $row['post_id'] )
-				{
-					$new_parent_loop = false;
-				}
-				
 			}
-			elseif( $prev && $prev['name'] == $field_name )
+			else
 			{
-				// Inception: Ride kick up one level
-				// Note: This can happen if someone used break or ran out of rows
-				reset_rows();
-				$new_parent_loop = false;
+				// case: Chang in $field_name is the most obvious, this is a new loop for a different field within the $post
+				// action: leave this current loop alone and create a new parent loop
+				$new_parent_loop = true;
 			}
-
+			
 			
 		}
 	}
@@ -456,7 +482,7 @@ function have_rows( $field_name, $post_id = false )
 	}
 	
 	
-	// no newxt row!
+	// no next row!
 	reset_rows();
 	
 	
@@ -483,6 +509,7 @@ function the_row() {
 	
 	// vars
 	$depth = count( $GLOBALS['acf_field'] ) - 1;
+
 	
 	
 	// increase row
@@ -559,8 +586,8 @@ function reset_rows( $hard_reset = false ) {
 *  @return	bool
 */
 
-function has_sub_field( $field_name, $post_id = false )
-{
+function has_sub_field( $field_name, $post_id = false ) {
+	
 	// vars
 	$r = have_rows( $field_name, $post_id );
 	
@@ -633,7 +660,7 @@ function get_sub_field( $field_name ) {
 	
 	
 	// return false
-	return $value[ $i ][ $field_name ];
+	return false;
 }
 
 
