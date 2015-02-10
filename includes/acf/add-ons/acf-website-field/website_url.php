@@ -269,7 +269,7 @@ echo '<td><input type="text" value="' . $link_url . '" id="' . $field['name'] . 
 				<tr class="field_option field_option_<?php echo $this->name; ?>">
 			<td class="label">
 				<label><?php _e("Return array instead of Link",'acf'); ?></label>
-				<p class="description">If "Yes" than the get_field will return an array</p>
+				<p class="description">If "Yes" than the acf_get_field will return an array</p>
 			</td>
 			<td>
 				<?php
