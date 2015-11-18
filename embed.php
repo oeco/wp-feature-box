@@ -120,8 +120,8 @@ if(!class_exists('WP_Feature_Embed')) {
 		}
 		
 		public function print_embed_script() {
-	
-            header('Content-type: application/javascript');
+			// header was hidden because it conflicts with magic field: file can't upload
+            //header('Content-type: application/javascript');
 				
 			if(isset($_REQUEST['wp_feature_embed'])) {
 			

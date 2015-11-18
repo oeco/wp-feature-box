@@ -15,7 +15,7 @@ global $post, $field_types;
 
 
 // get fields
-$fields = apply_filters('acf/field_group/get_fields', array(), $post->ID);
+$fields = apply_filters('acf/field_group/acf_get_fields', array(), $post->ID);
 
 
 // add clone
