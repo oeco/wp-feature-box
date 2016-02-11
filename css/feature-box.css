@@ -11,7 +11,6 @@
 blockquote  .wp-feature-box {
     margin-bottom: 15px  
 }
-
 .wp-feature-box .wp-feature-box-container {
 	padding: 2%;
 	display: inline-block;
@@ -71,6 +70,10 @@ blockquote  .wp-feature-box {
 .wp-feature-box .wp-feature-box-header {
 	text-align: center;
 	margin: 0 auto 10px;
+}
+ 
+.wp-feature-box-header blockquote {
+    padding: 15px 15px;
 }
 
 .wp-feature-box .wp-feature-box-header h2 {
