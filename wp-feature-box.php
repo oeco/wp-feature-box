@@ -144,7 +144,7 @@ if(!class_exists('WP_Feature_Box')) {
 				'labels' => $labels,
 				'hierarchical' => false,
 				'description' => __('Feature Box Items', 'wp-feature-box'),
-				'supports' => array('title'),
+				'supports' => array('title', 'editor'),
 				'public' => false,
 				'show_ui' => true,
 				'exclude_from_search' => true,
@@ -215,7 +215,7 @@ if(!class_exists('WP_Feature_Box')) {
 					'key' => 'field_wp_feature_box_description',
 					'label' => __('Description', 'wp-feature-box'),
 					'name' => $this->fields_prefix . 'description',
-					//'type' => 'textarea', 
+					//'type' => 'textarea',
 					'type' => 'wysiwyg',
 					'options' => array(),
 					'instructions' => __('In few words, describe the content inside this feature box', 'wp-feature-box'),
@@ -318,8 +318,13 @@ if(!class_exists('WP_Feature_Box')) {
 		public function get_feature_box_description($id) {
 			global $post;
 			$id = $id ? $id: $post->ID;
-
-			return $this->get_feature_box_field($id, 'description');
+			$get_content = get_post($id);
+			$post_content = apply_filters('translate_text', $get_content->post_content, odm_language_manager()->get_current_language());
+			if($post_content):
+					return $post_content;
+			else:
+				return $this->get_feature_box_field($id, 'description');
+			endif;
 		}
 
 		/*
