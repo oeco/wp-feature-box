@@ -92,7 +92,9 @@ blockquote  .wp-feature-box {
 	max-width: 600px;
 	margin: 0 auto 0;
 }
-
+.wp-feature-box .wp-feature-box-header strong { 
+	color: #f0f0f0;
+}
 .wp-feature-box .wp-feature-box-main-link {
 	position: absolute;
 	top: 0;
