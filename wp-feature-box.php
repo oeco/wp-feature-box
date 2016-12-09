@@ -225,6 +225,14 @@ if(!class_exists('WP_Feature_Box')) {
 					'formatting' => 'br',
 				),
 				array (
+					'key' => 'field_wp_feature_box_title',
+					'label' => __('Hide the title', 'wp-feature-box'),
+					'name' => $this->fields_prefix . 'title',
+      		'type' => 'true_false',
+					'message' => __('Enable', 'wp-feature-box'),
+					'instructions' => __('Enable the option to hide the post title on fearture box', 'wp-feature-box'),
+				),
+				array (
 					'key' => 'field_wp_feature_box_image',
 					'label' => __('Background image', 'wp-feature-box'),
 					'name' => $this->fields_prefix . 'background_image',
