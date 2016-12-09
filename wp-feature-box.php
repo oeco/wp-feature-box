@@ -3,7 +3,7 @@
 Plugin Name: WP Feature Box
 Plugin URI: http://cardume.art.br/wp-feature-box
 Description: A simple WordPress feature box plugin
-Version: 0.1.3
+Version: 0.1.5
 Author: Miguel Peixe
 Author URI: http://ecolab.oeco.org.br/
 License: GPLv3
@@ -144,7 +144,7 @@ if(!class_exists('WP_Feature_Box')) {
 				'labels' => $labels,
 				'hierarchical' => false,
 				'description' => __('Feature Box Items', 'wp-feature-box'),
-				'supports' => array('title'),
+				'supports' => array('title', 'editor'),
 				'public' => false,
 				'show_ui' => true,
 				'exclude_from_search' => true,
@@ -215,12 +215,22 @@ if(!class_exists('WP_Feature_Box')) {
 					'key' => 'field_wp_feature_box_description',
 					'label' => __('Description', 'wp-feature-box'),
 					'name' => $this->fields_prefix . 'description',
-					'type' => 'textarea',
+					//'type' => 'textarea',
+					'type' => 'wysiwyg',
+					'options' => array(),
 					'instructions' => __('In few words, describe the content inside this feature box', 'wp-feature-box'),
 					'default_value' => '',
 					'placeholder' => '',
 					'maxlength' => '',
 					'formatting' => 'br',
+				),
+				array (
+					'key' => 'field_wp_feature_box_title',
+					'label' => __('Hide the title', 'wp-feature-box'),
+					'name' => $this->fields_prefix . 'title',
+      		'type' => 'true_false',
+					'message' => __('Enable', 'wp-feature-box'),
+					'instructions' => __('Enable the option to hide the post title on fearture box', 'wp-feature-box'),
 				),
 				array (
 					'key' => 'field_wp_feature_box_image',
@@ -307,7 +317,7 @@ if(!class_exists('WP_Feature_Box')) {
 		}
 
 		public function get_feature_box_field($id, $field) {
-			return get_field($this->fields_prefix . $field, $id);
+			return acf_get_field($this->fields_prefix . $field, $id);
 		}
 
 		/*
@@ -316,8 +326,13 @@ if(!class_exists('WP_Feature_Box')) {
 		public function get_feature_box_description($id) {
 			global $post;
 			$id = $id ? $id: $post->ID;
-
-			return $this->get_feature_box_field($id, 'description');
+			$get_content = get_post($id);
+			$post_content = apply_filters('translate_text', $get_content->post_content, odm_language_manager()->get_current_language());
+			if($post_content):
+					return $post_content;
+			else:
+				return $this->get_feature_box_field($id, 'description');
+			endif;
 		}
 
 		/*
@@ -356,12 +371,12 @@ if(!class_exists('WP_Feature_Box')) {
 
 				$link_group = array();
 
-				$link_group['title'] = get_field($this->fields_prefix . $key . '_title', $id);
+				$link_group['title'] = acf_get_field($this->fields_prefix . $key . '_title', $id);
 				$link_group['links'] = array();
 
 				for($i = 1; $i <= $links_amount; $i++) {
 
-					$link = get_field($this->fields_prefix . $key . '_link_' . $i, $id);
+					$link = acf_get_field($this->fields_prefix . $key . '_link_' . $i, $id);
 					if($link)
 						$link_group['links'][] = $link;
 
