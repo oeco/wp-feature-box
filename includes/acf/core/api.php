@@ -1,7 +1,7 @@
 <?php
 
 /*
-*  get_field_reference()
+*  acf_get_field_reference()
 *
 *  This function will find the $field_key that is related to the $field_name.
 *  This is know as the field value reference
@@ -16,7 +16,7 @@
 *  @return	string	$return:  a string containing the field_key
 */
 
-function get_field_reference( $field_name, $post_id ) {
+function acf_get_field_reference( $field_name, $post_id ) {
 	
 	// cache
 	$found = false;
@@ -58,7 +58,7 @@ function get_field_reference( $field_name, $post_id ) {
 
 
 /*
-*  get_field_objects()
+*  acf_get_field_objects()
 *
 *  This function will return an array containing all the custom field objects for a specific post_id.
 *  The function is not very elegant and wastes a lot of PHP memory / SQL queries if you are not using all the fields / values.
@@ -72,7 +72,7 @@ function get_field_reference( $field_name, $post_id ) {
 *  @return	array	$return: an array containin the field groups
 */
 
-function get_field_objects( $post_id = false, $options = array() ) {
+function acf_get_field_objects( $post_id = false, $options = array() ) {
 	
 	// global
 	global $wpdb;
@@ -121,7 +121,7 @@ function get_field_objects( $post_id = false, $options = array() ) {
 	{
 		foreach( $keys as $key )
 		{
-			$field = get_field_object( $key, $post_id, $options );
+			$field = acf_get_field_object( $key, $post_id, $options );
 			
 			if( !is_array($field) )
 			{
@@ -146,7 +146,7 @@ function get_field_objects( $post_id = false, $options = array() ) {
 
 
 /*
-*  get_fields()
+*  acf_get_fields()
 *
 *  This function will return an array containing all the custom field values for a specific post_id.
 *  The function is not very elegant and wastes a lot of PHP memory / SQL queries if you are not using all the values.
@@ -160,7 +160,7 @@ function get_field_objects( $post_id = false, $options = array() ) {
 *  @return	array	$return: an array containin the field values
 */
 
-function get_fields( $post_id = false, $format_value = true ) {
+function acf_get_fields( $post_id = false, $format_value = true ) {
 	
 	// vars
 	$options = array(
@@ -169,7 +169,7 @@ function get_fields( $post_id = false, $format_value = true ) {
 	);
 	
 	
-	$fields = get_field_objects( $post_id, $options );
+	$fields = acf_get_field_objects( $post_id, $options );
 	
 	if( is_array($fields) )
 	{
@@ -184,7 +184,7 @@ function get_fields( $post_id = false, $format_value = true ) {
 
 
 /*
-*  get_field()
+*  acf_get_field()
 *
 *  This function will return a custom field value for a specific field name/key + post_id.
 *  There is a 3rd parameter to turn on/off formating. This means that an Image field will not use 
@@ -201,7 +201,7 @@ function get_fields( $post_id = false, $format_value = true ) {
 *  @return	mixed		$value: the value found
 */
  
-function get_field( $field_key, $post_id = false, $format_value = true ) {
+function acf_get_field( $field_key, $post_id = false, $format_value = true ) {
 	
 	// vars
 	$return = false;
@@ -211,7 +211,7 @@ function get_field( $field_key, $post_id = false, $format_value = true ) {
 	);
 
 	
-	$field = get_field_object( $field_key, $post_id, $options);
+	$field = acf_get_field_object( $field_key, $post_id, $options);
 	
 	
 	if( is_array($field) )
@@ -226,7 +226,7 @@ function get_field( $field_key, $post_id = false, $format_value = true ) {
 
 
 /*
-*  get_field_object()
+*  acf_get_field_object()
 *
 *  This function will return an array containing all the field data for a given field_name
 *
@@ -243,7 +243,7 @@ function get_field( $field_key, $post_id = false, $format_value = true ) {
 *  @return	array		$return: an array containin the field groups
 */
 
-function get_field_object( $field_key, $post_id = false, $options = array() ) {
+function acf_get_field_object( $field_key, $post_id = false, $options = array() ) {
 	
 	// make sure add-ons are included
 	acf()->include_3rd_party();
@@ -268,7 +268,7 @@ function get_field_object( $field_key, $post_id = false, $options = array() ) {
 	if( substr($field_key, 0, 6) !== 'field_' )
 	{
 		// get field key
-		$field_key = get_field_reference( $field_key, $post_id );
+		$field_key = acf_get_field_reference( $field_key, $post_id );
 	}
 	
 	
@@ -314,7 +314,7 @@ function get_field_object( $field_key, $post_id = false, $options = array() ) {
 /*
 *  the_field()
 *
-*  This function is the same as echo get_field().
+*  This function is the same as echo acf_get_field().
 *
 *  @type	function
 *  @since	1.0.3
@@ -328,7 +328,7 @@ function get_field_object( $field_key, $post_id = false, $options = array() ) {
 
 function the_field( $field_name, $post_id = false ) {
 	
-	$value = get_field($field_name, $post_id);
+	$value = acf_get_field($field_name, $post_id);
 	
 	if( is_array($value) )
 	{
@@ -439,7 +439,7 @@ function have_rows( $field_name, $post_id = false ) {
 	if( $new_parent_loop )
 	{
 		// vars
-		$f = get_field_object( $field_name, $post_id );
+		$f = acf_get_field_object( $field_name, $post_id );
 		$v = $f['value'];
 		unset( $f['value'] );
 		
@@ -863,8 +863,8 @@ function register_field_group( $array )
 }
 
 
-add_filter('acf/get_field_groups', 'api_acf_get_field_groups', 2, 1);
-function api_acf_get_field_groups( $return )
+add_filter('acf/acf_get_field_groups', 'api_acf_acf_get_field_groups', 2, 1);
+function api_acf_acf_get_field_groups( $return )
 {
 	// validate
 	if( empty($GLOBALS['acf_register_field_group']) )
@@ -902,8 +902,8 @@ function api_acf_get_field_groups( $return )
 }
 
 
-add_filter('acf/field_group/get_fields', 'api_acf_field_group_get_fields', 1, 2);
-function api_acf_field_group_get_fields( $fields, $post_id )
+add_filter('acf/field_group/acf_get_fields', 'api_acf_field_group_acf_get_fields', 1, 2);
+function api_acf_field_group_acf_get_fields( $fields, $post_id )
 {
 	// validate
 	if( !empty($GLOBALS['acf_register_field_group']) )
@@ -1029,7 +1029,7 @@ function get_row_layout()
 *			string	+ field: the field name
 *			mixed	+ post_id: the post_id to load from
 *
-*  @return	string	$value: the value found by get_field
+*  @return	string	$value: the value found by acf_get_field
 */
 
 function acf_shortcode( $atts )
@@ -1049,7 +1049,7 @@ function acf_shortcode( $atts )
 	
 	
 	// get value and return it
-	$value = get_field( $field, $post_id );
+	$value = acf_get_field( $field, $post_id );
 	
 	
 	if( is_array($value) )
@@ -1255,7 +1255,7 @@ function acf_form( $options = array() )
 	echo $options['html_before_fields'];
 	
 	
-	$acfs = apply_filters('acf/get_field_groups', array());
+	$acfs = apply_filters('acf/acf_get_field_groups', array());
 	
 	if( is_array($acfs) ){ foreach( $acfs as $acf ){
 		
@@ -1271,7 +1271,7 @@ function acf_form( $options = array() )
 		
 		
 		// load fields
-		$fields = apply_filters('acf/field_group/get_fields', array(), $acf['id']);
+		$fields = apply_filters('acf/field_group/acf_get_fields', array(), $acf['id']);
 		
 		
 		echo '<div id="acf_' . $acf['id'] . '" class="postbox acf_postbox ' . $acf['options']['layout'] . '">';
@@ -1334,7 +1334,7 @@ function update_field( $field_key, $value, $post_id = false )
 		'format_value' => false
 	);
 	
-	$field = get_field_object( $field_key, $post_id, $options);
+	$field = acf_get_field_object( $field_key, $post_id, $options);
 
 	
 	// sub fields? They need formatted data
@@ -1413,7 +1413,7 @@ function create_field( $field )
 *  @since	4.0.0
 *  @date	17/03/13
 *
-*  @param	array	$value: the value returned via get_field
+*  @param	array	$value: the value returned via acf_get_field
 *  @param	array	$field: the field or layout to find sub fields from
 *
 *  @return	N/A

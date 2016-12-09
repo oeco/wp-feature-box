@@ -92,7 +92,7 @@ class acf_everything_fields
 		}
 		
 		
-		$acfs = apply_filters('acf/get_field_groups', array());
+		$acfs = apply_filters('acf/acf_get_field_groups', array());
 	
 	
 		if( is_array($acfs) ){ foreach( $acfs as $acf ){
@@ -105,7 +105,7 @@ class acf_everything_fields
 			
 			
 			// load fields
-			$fields = apply_filters('acf/field_group/get_fields', array(), $acf['id']);
+			$fields = apply_filters('acf/field_group/acf_get_fields', array(), $acf['id']);
 			
 			
 			if( is_array($fields) ){ foreach( $fields as $i => $field ){
@@ -654,7 +654,7 @@ $(document).ready(function(){
 		
 			
 		// get acfs
-		$acfs = apply_filters('acf/get_field_groups', false);
+		$acfs = apply_filters('acf/acf_get_field_groups', false);
 			
 		
 		// layout
@@ -726,7 +726,7 @@ $(document).ready(function(){
 				
 				
 				// load fields
-				$fields = apply_filters('acf/field_group/get_fields', array(), $acf['id']);
+				$fields = apply_filters('acf/field_group/acf_get_fields', array(), $acf['id']);
 				
 				
 				if( is_array($fields) ){ foreach( $fields as $field ){

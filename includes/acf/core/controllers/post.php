@@ -176,7 +176,7 @@ class acf_controller_post
 		
 		
 		// get field groups
-		$acfs = apply_filters('acf/get_field_groups', array());
+		$acfs = apply_filters('acf/acf_get_field_groups', array());
 		
 		
 		if( $acfs )
@@ -292,7 +292,7 @@ class acf_controller_post
 		// HTML
 		if( $args['show'] )
 		{
-			$fields = apply_filters('acf/field_group/get_fields', array(), $args['field_group']['id']);
+			$fields = apply_filters('acf/field_group/acf_get_fields', array(), $args['field_group']['id']);
 	
 			do_action('acf/create_fields', $fields, $args['post_id']);
 		}
@@ -464,14 +464,14 @@ class acf_controller_post
 		
 		
 		// get acfs
-		$acfs = apply_filters('acf/get_field_groups', array());
+		$acfs = apply_filters('acf/acf_get_field_groups', array());
 		if( $acfs )
 		{
 			foreach( $acfs as $acf )
 			{
 				if( $acf['id'] == $options['acf_id'] )
 				{
-					$fields = apply_filters('acf/field_group/get_fields', array(), $acf['id']);
+					$fields = apply_filters('acf/field_group/acf_get_fields', array(), $acf['id']);
 					
 					do_action('acf/create_fields', $fields, $options['post_id']);
 					
@@ -544,10 +544,10 @@ class acf_controller_post
 		global $post;
 		
 		
-		// if acf_get_field_reference returns a valid key, this is an acf value, so protect it!
+		// if acf_acf_get_field_reference returns a valid key, this is an acf value, so protect it!
 		if( !$protected ) {
 			
-			$reference = get_field_reference( $meta_key, $post->ID );
+			$reference = acf_get_field_reference( $meta_key, $post->ID );
 			
 			if( substr($reference, 0, 6) === 'field_' ) {
 				
