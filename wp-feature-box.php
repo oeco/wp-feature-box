@@ -3,7 +3,7 @@
 Plugin Name: WP Feature Box
 Plugin URI: http://cardume.art.br/wp-feature-box
 Description: A simple WordPress feature box plugin
-Version: 0.1.3
+Version: 0.1.5
 Author: Miguel Peixe
 Author URI: http://ecolab.oeco.org.br/
 License: GPLv3
@@ -223,6 +223,14 @@ if(!class_exists('WP_Feature_Box')) {
 					'placeholder' => '',
 					'maxlength' => '',
 					'formatting' => 'br',
+				),
+				array (
+					'key' => 'field_wp_feature_box_title',
+					'label' => __('Hide the title', 'wp-feature-box'),
+					'name' => $this->fields_prefix . 'title',
+      		'type' => 'true_false',
+					'message' => __('Enable', 'wp-feature-box'),
+					'instructions' => __('Enable the option to hide the post title on fearture box', 'wp-feature-box'),
 				),
 				array (
 					'key' => 'field_wp_feature_box_image',
