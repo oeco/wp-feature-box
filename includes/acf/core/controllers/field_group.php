@@ -29,8 +29,8 @@ class acf_field_group
 		
 		
 		// filters
-		add_filter('acf/get_field_groups', array($this, 'get_field_groups'), 1, 1);
-		add_filter('acf/field_group/get_fields', array($this, 'get_fields'), 5, 2);
+		add_filter('acf/acf_get_field_groups', array($this, 'acf_get_field_groups'), 1, 1);
+		add_filter('acf/field_group/acf_get_fields', array($this, 'acf_get_fields'), 5, 2);
 		add_filter('acf/field_group/get_location', array($this, 'get_location'), 5, 2);
 		add_filter('acf/field_group/get_options', array($this, 'get_options'), 5, 2);
 		add_filter('acf/field_group/get_next_field_id', array($this, 'get_next_field_id'), 5, 1);
@@ -49,14 +49,14 @@ class acf_field_group
 	
 	
 	/*
-	*  get_field_groups
+	*  acf_get_field_groups
 	*
 	*  @description: 
 	*  @since: 3.6
 	*  @created: 27/01/13
 	*/
 	
-	function get_field_groups( $array )
+	function acf_get_field_groups( $array )
 	{
 		// cache
 		$found = false;
@@ -99,14 +99,14 @@ class acf_field_group
 	
 	
 	/*
-	*  get_fields
+	*  acf_get_fields
 	*
 	*  @description: returns all fields for a field group
 	*  @since: 3.6
 	*  @created: 26/01/13
 	*/
 	
-	function get_fields( $fields, $post_id )
+	function acf_get_fields( $fields, $post_id )
 	{
 		// global
 		global $wpdb;

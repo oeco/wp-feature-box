@@ -227,7 +227,7 @@ class acf_upgrade
 
 			case '3.0.0':
 
-				// upgrade options first as "field_group_layout" will cause get_fields to fail!
+				// upgrade options first as "field_group_layout" will cause acf_get_fields to fail!
 
 				// get acf's
 				$acfs = get_posts(array(

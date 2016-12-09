@@ -358,7 +358,7 @@ if(function_exists("register_field_group"))
 				$var = array(
 					'id' => $acf->post_name,
 					'title' => $acf->post_title,
-					'fields' => apply_filters('acf/field_group/get_fields', array(), $acf->ID),
+					'fields' => apply_filters('acf/field_group/acf_get_fields', array(), $acf->ID),
 					'location' => apply_filters('acf/field_group/get_location', array(), $acf->ID),
 					'options' => apply_filters('acf/field_group/get_options', array(), $acf->ID),
 					'menu_order' => $acf->menu_order,

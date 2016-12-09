@@ -131,7 +131,7 @@ class acf_revisions
 		
 		
 		// get field objects
-		$fields = get_field_objects( $post_id, array('format_value' => false ) );
+		$fields = acf_get_field_objects( $post_id, array('format_value' => false ) );
 		
 		
 		if( $fields )
@@ -212,7 +212,7 @@ class acf_revisions
 		
 		
 		// load field
-		$field = get_field_object($field_name, $post_id, array('format_value' => false ));
+		$field = acf_get_field_object($field_name, $post_id, array('format_value' => false ));
 		$value = $field['value'];
 		
 		

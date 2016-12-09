@@ -146,7 +146,7 @@ class acf_location
 		
 		
 		// find all acf objects
-		$acfs = apply_filters('acf/get_field_groups', array());
+		$acfs = apply_filters('acf/acf_get_field_groups', array());
 
 		
 		// blank array to hold acfs

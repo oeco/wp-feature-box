@@ -202,7 +202,7 @@ class acf
 		*  Override for preview
 		*  
 		*  If the $_GET['preview_id'] is set, then the user wants to see the preview data.
-		*  There is also the case of previewing a page with post_id = 1, but using get_field
+		*  There is also the case of previewing a page with post_id = 1, but using acf_get_field
 		*  to load data from another post_id.
 		*  In this case, we need to make sure that the autosave revision is actually related
 		*  to the $post_id variable. If they match, then the autosave data will be used, otherwise, 
