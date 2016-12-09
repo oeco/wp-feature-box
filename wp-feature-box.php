@@ -212,19 +212,6 @@ if(!class_exists('WP_Feature_Box')) {
              */
 			$fields = array(
 				array (
-					'key' => 'field_wp_feature_box_description',
-					'label' => __('Description', 'wp-feature-box'),
-					'name' => $this->fields_prefix . 'description',
-					//'type' => 'textarea',
-					'type' => 'wysiwyg',
-					'options' => array(),
-					'instructions' => __('In few words, describe the content inside this feature box', 'wp-feature-box'),
-					'default_value' => '',
-					'placeholder' => '',
-					'maxlength' => '',
-					'formatting' => 'br',
-				),
-				array (
 					'key' => 'field_wp_feature_box_image',
 					'label' => __('Background image', 'wp-feature-box'),
 					'name' => $this->fields_prefix . 'background_image',

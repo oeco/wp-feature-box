@@ -6,10 +6,10 @@
 	color: #f0f0f0;
 	position: relative;
 	padding: 0;
-    min-height: 150px;   
+    min-height: 150px;
 }
 blockquote  .wp-feature-box {
-    margin-bottom: 15px  
+    margin-bottom: 15px
 }
 .wp-feature-box .wp-feature-box-container {
 	padding: 2%;
@@ -71,7 +71,7 @@ blockquote  .wp-feature-box {
 	text-align: center;
 	margin: 0 auto 10px;
 }
- 
+
 .wp-feature-box-header blockquote {
     padding: 15px 15px;
 }
@@ -229,7 +229,7 @@ blockquote  .wp-feature-box {
 	font-size: 90%;
 }
 
-/* 
+/*
  * Embed tool
  */
 
